@@ -1,0 +1,496 @@
+*{
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+body{
+    background-image: url('/static/Images/Signup.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+
+}
+.space{
+    height: 4.5rem;
+    width: 50vw;
+}
+nav{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    padding: 0.5rem;
+    position: fixed;
+    z-index: 5;
+    box-shadow: 0 5px 50px 5px black;
+}
+.logo{
+    width: 8rem;
+    margin-right: 3rem;
+}
+.nav-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    transition: height 1s ease;
+}
+.nav-links a{
+    text-decoration: none;
+    color: white;
+    margin: 1rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+#hamburger-btn{
+    display: none;
+}
+.search-div input{
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0 0.5rem;
+    color: black;
+}
+.search-sub-div{
+    margin: 0 4rem;
+    background-color: white;
+    border-radius: 7rem;
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 1rem;
+
+
+}
+.search-div{
+    display: flex;
+    flex-direction: row;
+}
+.search-div button{
+    width: 1rem;
+    background-size: 1rem;
+    margin: 0;
+    height: 1.8rem;
+    width: 1.8rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.btn{
+    background-image: linear-gradient(to right,#39EAA8,#262A24);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.2rem;
+    border-radius: 7rem;
+    cursor: pointer;
+}
+.btn:hover{
+    opacity: 80%;
+}
+.auth-div label{
+    color: white;
+}
+#loginbtn{
+    background: none;
+    color: white;
+    font-size: 1.2rem;
+    margin: 0 2rem;
+}
+
+.container{
+    /* width: 100vw; */
+    height: 100vh;
+    padding: 2rem;
+    overflow-y: scroll;
+}
+
+.card img{
+    width: 2rem;
+    height: 3rem;
+    border-radius: 0.3rem;
+}
+.card{
+    color: black;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    padding: 0.5rem ;
+    width: 18.2rem;
+    border-radius: 0.5rem;
+    justify-content: space-between;
+    margin: 1rem;
+}
+.card div{
+    width: 13rem;
+}
+.naat-cards-div{
+    display: flex;
+    flex-direction: row;
+    scrollbar-width: 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.play-btn{
+    background-image: url('/static/Images/play-btn.png');
+    width: 2.5rem;
+    height: 2.5rem;
+    background-size: cover;
+    background-color: transparent;
+    border: none;
+    /* position: absolute; */
+    /* margin: 5rem 0 0 -3rem; */
+    cursor: pointer;
+}
+.play-btn:hover{
+    opacity: 70%;
+}
+.player-div{
+    width: 80rem;
+    height: 9rem;
+    /* height: 85%; */
+    backdrop-filter: blur(20px);
+    position: absolute;
+    bottom: 1rem;
+    align-self: center;
+    background-color: rgba(255, 255, 255, 0.544);
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition-property: height;
+    transition-duration: 0.5s;
+    z-index: 6;
+}
+
+#progressbar{
+    width: 90%;
+    color: black;
+}
+.duration-div{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    height: 2rem;
+}
+.controls-div{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.controls-div>:first-child{
+    display: flex;
+}
+.control-btns{
+    height: 1.8rem;
+    width: 1.8rem;
+    background-size: cover;
+    background-position: center;
+    margin: 1rem;
+    padding: 1rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.control-btns:hover{
+    opacity: 80%;
+}
+#expand-btn{
+    height: 1rem;
+    width: 1rem;
+    align-self: flex-start;
+    margin: 0 4rem;
+    background-size: 0.9rem;
+}
+
+.loader {
+    border-radius: 100%;
+    
+    border: 5px dashed black;
+    padding: 1rem;
+  }
+.loader {
+    animation: animation 1.2s ease-out 0.8s infinite;
+    
+}
+.loader-div {
+    display: none;
+    align-items: center;
+    align-content: center;
+    justify-content: center;  
+}
+.track-contrl-div{
+    display: flex;
+    flex-direction: row;
+}
+
+@keyframes animation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .inputbox{
+    margin: 1em 0;
+    font-size: 1em;
+    padding: 0.7em;
+    background-color: white;
+    border: 2px solid rgba(0, 0, 0, 0.196);
+    border-radius: 0.2em;
+}
+.signup-head{
+    background-image: linear-gradient(to right,#39EAA8,#262A24);
+    display: flex;
+    justify-content: center;
+    color: white;
+    padding: 0.9rem;
+    font-size: 0.7rem;
+}
+ .signup-body div{
+    display: flex;
+    flex-direction: column;
+ }
+ .signup-div{
+    width: 23rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    
+    
+ }
+ .signup-body{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+ }
+ .signup-body button{
+    border: none;
+ }
+ .msg-div{
+    display: flex;
+    position: absolute;
+    bottom: 10rem;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(231, 78, 78, 0.807);
+    z-index: 6;
+    justify-content: center;
+    width: fit-content;
+    padding: 0.7rem 1rem;
+    color: white;
+    border-radius: 0.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.516);
+    /* animation: JumpIn 1s ease-in 1; */
+    opacity: 0;
+    transition-property: opacity;
+ }
+
+ .disk{
+    border-radius: 100%;
+    width: 18rem;
+    height: 18rem;
+    border: 1rem solid rgba(19, 131, 2, 0.645);
+    animation: diskSpinner 2s linear infinite; 
+    margin: 1rem;
+    transition: all;
+
+ }
+ .disk-spinner-div{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+ }
+ #tone-arm{
+    /* margin-bottom: 7rem; */
+
+    /* position: absolute; */
+    margin-left: -8.5rem;
+    margin-bottom: 8rem;
+    position: relative;
+    /* right: 25rem; */
+    transform-origin: 75% 20%;
+    transform: rotate(-28deg);
+    transition: transform 0.5s;
+ }
+ .player-body{
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+ }
+ .player-head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.714);
+    align-items: center;
+ }
+ .player-head h1{
+    margin: 1rem;
+ }
+ .lyrics{
+    height: 20rem;
+    padding: 1rem;
+    overflow-y: scroll;
+ }
+
+ .paused {
+    animation-play-state: paused;
+  }
+
+.loading-div{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    backdrop-filter: blur(20px);
+}
+
+.pagination-div{
+    align-self: center;
+    width: 100%;
+    /* background-color: red; */
+    display: flex;
+    justify-content: center;
+}
+.page-numbers{
+    padding: 0.5rem;
+    background-color: transparent;
+    border-radius: 0.2rem;
+    min-width: 3rem;
+    font-size: 1rem;
+    color: white;
+}
+.page-numbers:hover{
+    background-color: rgba(240, 248, 255, 0.219);
+}
+button{
+    cursor: pointer;
+}
+.current{
+    background-color: #39EAA8;
+}
+
+
+
+
+
+
+
+
+
+
+
+@keyframes diskSpinner {
+    0%{
+        transform: rotate(0);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes JumpIn {
+    0%{
+        opacity: 0;
+
+    }
+    50%{
+        opacity: 100%;
+    }
+    100%{
+        opacity: 0%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MObile Responsive css */
+
+@media screen and (max-width:600px) {
+    html{
+        font-size: 12px;
+    }
+    nav{
+        background-color: transparent;
+        margin: 0;
+        padding: 0;
+    }
+    #hamburger-btn{
+        display: flex;
+    }
+    .nav-div{
+        flex-direction: column;
+        width: 100vw;
+        background-color: transparent;
+        backdrop-filter: blur(25px);
+        padding: 1rem;
+        margin: 0;
+    }
+ 
+    .nav-links{
+        display: none;
+        flex-direction: column;
+    }
+    .auth-div{
+        display: none;
+    }
+    .search-div{
+        display: flex;
+    }
+    .player-div{
+        width: 100vw;
+    }
+    .card{
+        width: 12rem;
+
+    }
+    .card img{
+        width: 12rem;
+        height: 6rem;
+    }
+    .play-btn{
+        margin: 3rem 0 0 -3rem;
+    }
+}   
+    

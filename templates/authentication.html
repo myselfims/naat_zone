@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<style>
+    .player-div{
+        display: none;
+    }
+    .container{
+        justify-content: center;
+        display: flex;
+    }
+</style>
+{% if page == 'signup' %}
+<form action="{%url 'signup' %}" method="post">{% csrf_token %}
+{% else %}
+<form action="{%url 'login' %}" method="post">{% csrf_token %}
+{% endif %}
+    <div class="signup-div">
+        <div class="signup-head">
+            {% if page == 'signup' %}
+            <h1>Sign Up</h1>
+            {% else %}
+            <h1>Login</h1>
+            {% endif %}
+        </div>
+        <div class="signup-body">
+            <div>
+                <label for="">Username</label>
+                <input name='username' class="inputbox" type="text">
+            </div>
+            <div>
+                {% if page == 'signup' %}
+                <label for="">Email</label>
+                <input name='email' class="inputbox" type="mail">
+                {% endif %}
+            </div>
+            <div>
+                <label for="">Password</label>
+                <input name='password' class="inputbox" type="password">
+            </div>
+            {% if page == 'signup' %}
+                <button class="btn">Sign up</button>
+            {% else %}
+            <button class="btn">Login</button> 
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+{% endblock body %}

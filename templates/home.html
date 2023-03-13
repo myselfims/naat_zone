@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="top-card-div">
+    <h4 id='heading'>Ramzan Special Naats</h4>
+    <div class="naat-cards-div">
+        {% for naat in topnaats %}
+        <div class="card">
+            <img src="https://www.seekpng.com/png/full/415-4154541_dj-disk-png-orange-clip-art.png" alt="">
+            <div>
+                <h4>{{naat.title}}</h4>
+                <label for="">{{naat.naat_khwan}}</label>
+            </div>
+            <button id='{{forloop.counter}}' onclick='PlayNaat("{{naat.link}}","{{naat.title}}","{{forloop.counter}}")' class='play-btn'></button>
+            
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pagination-div">
+        {% comment %} <button onclick="ChangePage('{{pages.prev_page}}','pre')" class="previous pagination-btn"><</button>
+        <button class="pagination-btn current-page">1</button>
+        <button class="pagination-btn">2</button>
+        <button class="pagination-btn">....</button>
+        <button class="pagination-btn">17</button>
+        <button onclick="ChangePage('{{pages.next_page}}','next')" class="next pagination-btn">></button> {% endcomment %}
+        {{pages|safe}}
+    </div>
+</div>
+
+{% endblock body %}

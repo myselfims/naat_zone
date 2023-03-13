@@ -1,0 +1,159 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{%static 'style.css'%}">
+    <link rel="shortcut icon" href="{%static 'Images/favicon.ico' %}" type="image/x-icon">
+    <script src="{%static 'js.js' %}"></script>
+    <script src="/static/js.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<style>
+    #expand-btn{
+        background-image: url('{%static "Images/arrow-up.png" %}');
+    }
+    #play-btn{
+        background-image: url('{%static "Images/play.png" %}');
+    }
+    #prs-btn{
+        background-image: url('{%static "Images/previous.png" %}');
+    }
+    #nxt-btn{
+        background-image: url('{%static "Images/next.png" %}');
+    }
+    #loop-btn{
+        background-image: url('{%static "Images/loop.png" %}');
+        opacity: 70%;
+    }
+    #download-btn{
+        background-image: url('{%static "Images/download.png" %}');
+    }
+    #like-btn{
+        background-image: url('{%static "Images/heart-empty.png" %}');
+    }
+    #search-btn{
+        background-image: url('{%static "Images/search.png" %}');
+    }
+    #mic-btn{
+        background-image: url('{%static "Images/mic-icon.png" %}');
+    }
+    #volume-btn{
+        background-image: url('{%static "Images/volume-up.png" %}');
+    }
+</style>
+<body>
+    <header>
+        <nav>
+            <div class="nav-div">
+                <div class="logo-div">
+                    <img src="{%static 'Images/naat_zone_logo.png' %}" alt="" class="logo">
+                </div>
+                <div class="nav-links">
+                    <a onclick="Search('None')" >Home</a>
+                    <a >Naat Khawan</a>
+                    <a onclick="Search('ringtones')">Ringtones</a>
+                    <a href="">Trending</a>
+                    <a href="">Explore</a>
+                </div>
+                <div class="search-div">
+                    <div class="search-sub-div">
+                        <input name="query" placeholder='search' type="text">{% csrf_token %}
+                        <button onclick="Search(null)" id='search-btn'></button>
+                    </div>
+                    <button type="button" onclick="VoiceSearch()" id='mic-btn'></button>
+                    <button onclick="SideBarToggle()" id="hamburger-btn" class="btn">☰</button>
+                </div>
+                
+                {%if user.is_authenticated %}
+                <h1>{{user}}</h1>
+                <div class="auth-div">
+                    <label id='username-label'>{{user.username}}</label>
+                    <a href="{%url 'logout' %}"><button class='btn'>Logout</button></a>
+                </div>
+                {% else %}
+                <div class="auth-div">
+                    <a href="{%url 'login' %}"><button id='loginbtn'>Login</button></a>
+                    <a href="{%url 'signup' %}"><button class='btn'>Sign up</button></a>
+                </div>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="space"></div>
+        <div class="container">
+        {% block body %}
+            
+            <div class="pagination-div">
+                <button onclick="ChangePage('pre')" class="previous pagination-btn"><</button>
+                <button class="pagination-btn current-page">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">....</button>
+                <button class="pagination-btn">17</button>
+                <button onclick="ChangePage('next')" class="next pagination-btn">></button>
+            </div>
+
+        {% endblock body %}
+        </div>
+
+        <div id="msg-div" class="msg-div">
+            <label id="msg-label" for="">...</label>
+        </div>
+
+        <div id="player-div" class="player-div">
+            <button onclick="ExpandPlayer()" class="control-btns" id="expand-btn"></button>
+            <div class="player-body">
+                <div class="player-head">
+                    <h1>Naat Title Type Here.....</h1>
+                    <button id="lyrics-btn" onclick="GetLyrics()" class="btn">Lyrics</button>
+                </div>
+                <div class="disk-spinner-div">
+                    <div>
+                        <img src="https://www.seekpng.com/png/full/415-4154541_dj-disk-png-orange-clip-art.png" alt="" id="disk" class="disk paused">
+                        <img src="https://static.thenounproject.com/png/1584695-200.png" alt="" id="tone-arm" class="">
+                    </div>
+                    
+                    <div id="lyrics"></div>
+                </div>
+            </div>
+            <div class="duration-div">
+                <label id="timeline" for="">00:00</label>
+                <h4 id="track-title" for=""></h4>
+                <label id="duration" for="">00:00</label>
+            </div>
+            <input onclick="ChangeTimeline()" type="range" id="progressbar" value="0">
+            <div class="controls-div">
+                <div>
+                    <button onclick="LoopToggle()" class="control-btns" id="loop-btn"></button>
+                    <button onclick="SetVolume(true)" class="control-btns" id="volume-btn"></button>
+                    <input onchange='SetVolume(false)' type="range" min='0' max='100' class="volume_adjuster" value='100'>
+                </div>
+                <div class="track-contrl-div">
+                    <button onclick="TrackChanger('previous')" class="control-btns" id="prs-btn"></button>
+                    <button onclick="PlayerToggle()" class="control-btns" id="play-btn"></button>
+                    <div id="loader-div" class="loader-div">
+                        <span class="loader"></span>
+                    </div>
+                    <button onclick="TrackChanger('next')" class="control-btns" id="nxt-btn"></button>
+                </div>
+                <div>
+                    <a id='download-btn-link' href=""><button class="control-btns" id="download-btn"></button></a>
+                    <button class="control-btns" onclick='Like("{{naat.link}}","{{naat.title}}")'id="like-btn"></button>
+                </div>
+            </div>
+        </div>
+        <div id="loading-div" class="loading-div">
+            <span class="loader"></span>
+        </div>
+    </main>
+
+</body>
+<script>
+    var static_url = "{%static '' %}"
+</script>
+</html>
