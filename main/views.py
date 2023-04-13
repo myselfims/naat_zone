@@ -121,38 +121,3 @@ def ajax(request):
 
         
         
-def search(request):
-    if request.method == 'POST':
-        query = request.POST.get('query')
-        print(query)
-        result = SearchNaats(query)
-        return render(request, 'home.html',{'topnaats':result})
-    
-def signup(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = User.objects.create_user(username = username, emial = email, password = password)
-        user.save()
-        login(request,user)
-        return redirect('/')
-    return render(request, 'authentication.html',{'page':'signup'})
-
-def loginview(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username,password=password)
-        print('user is ',user)
-        if user is not None:
-            login(request,user)
-            return redirect('/')
-        else:
-            return JsonResponse({'msg':'User not found'})
-            return render(request, 'authentication.html',{'page':'login'})
-    return render(request, 'authentication.html',{'page':'login'})
-
-def logoutview(request):
-    logout(request)
-    return redirect('/')
