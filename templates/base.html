@@ -10,41 +10,13 @@
     <link rel="shortcut icon" href="{%static 'Images/favicon.ico' %}" type="image/x-icon">
     <script src="{%static 'js.js' %}"></script>
     <script src="/static/js.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Recursive&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <title>Document</title>
+    <title>Naat Zone</title>
 </head>
 <style>
-    #expand-btn{
-        background-image: url('{%static "Images/arrow-up.png" %}');
-    }
-    #play-btn{
-        background-image: url('{%static "Images/play.png" %}');
-    }
-    #prs-btn{
-        background-image: url('{%static "Images/previous.png" %}');
-    }
-    #nxt-btn{
-        background-image: url('{%static "Images/next.png" %}');
-    }
-    #loop-btn{
-        background-image: url('{%static "Images/loop.png" %}');
-        opacity: 70%;
-    }
-    #download-btn{
-        background-image: url('{%static "Images/download.png" %}');
-    }
-    #like-btn{
-        background-image: url('{%static "Images/heart-empty.png" %}');
-    }
-    #search-btn{
-        background-image: url('{%static "Images/search.png" %}');
-    }
-    #mic-btn{
-        background-image: url('{%static "Images/mic-icon.png" %}');
-    }
-    #volume-btn{
-        background-image: url('{%static "Images/volume-up.png" %}');
-    }
+  
 </style>
 <body>
     <header>
@@ -55,30 +27,31 @@
                 </div>
                 <div class="nav-links">
                     <a onclick="Search('None')" >Home</a>
-                    <a >Naat Khawan</a>
+                    {% comment %} <a onclick="GetArtist(NaN)" >Naat Khawan</a> {% endcomment %}
+                    <a onclick="Search('ramzan')">Ramzan</a>
                     <a onclick="Search('ringtones')">Ringtones</a>
-                    <a href="">Trending</a>
-                    <a href="">Explore</a>
+                    <a onclick='LoadFavorite()'>Favorite</a>
                 </div>
                 <div class="search-div">
                     <div class="search-sub-div">
                         <input name="query" placeholder='search' type="text">{% csrf_token %}
-                        <button onclick="Search(null)" id='search-btn'></button>
+                        <button onclick="Search(null)" id='search-btn'><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button type="button" onclick="VoiceSearch()" id='mic-btn'><i class="fa-solid fa-microphone"></i></button>
                     </div>
-                    <button type="button" onclick="VoiceSearch()" id='mic-btn'></button>
-                    <button onclick="SideBarToggle()" id="hamburger-btn" class="btn">☰</button>
                 </div>
+                <button onclick="SideBarToggle()" id="hamburger-btn" class="btn">☰</button>
                 
                 {%if user.is_authenticated %}
-                <h1>{{user}}</h1>
                 <div class="auth-div">
                     <label id='username-label'>{{user.username}}</label>
-                    <a href="{%url 'logout' %}"><button class='btn'>Logout</button></a>
+                    <a  onclick='Authentication("logout")'><button id='signupbtn' class='btn'>logout</button></a>
                 </div>
                 {% else %}
                 <div class="auth-div">
-                    <a href="{%url 'login' %}"><button id='loginbtn'>Login</button></a>
-                    <a href="{%url 'signup' %}"><button class='btn'>Sign up</button></a>
+                    <a onclick='Authentication("login")'><button id='loginbtn'>Login</button></a>
+                    <a  onclick='Authentication("signup")'><button id='signupbtn' class='btn'>Sign up</button></a>
+                    {% comment %} <a href="{%url 'login' %}"><button id='loginbtn'>Login</button></a>
+                    <a href="{%url 'signup' %}"><button class='btn'>Sign up</button></a> {% endcomment %}
                 </div>
                 {% endif %}
             </div>
@@ -106,7 +79,7 @@
         </div>
 
         <div id="player-div" class="player-div">
-            <button onclick="ExpandPlayer()" class="control-btns" id="expand-btn"></button>
+            <button onclick="ExpandPlayer()" class="control-btns" id="expand-btn"><i class="fa-solid fa-chevron-up"></i></button>
             <div class="player-body">
                 <div class="player-head">
                     <h1>Naat Title Type Here.....</h1>
@@ -114,12 +87,12 @@
                 </div>
                 <div class="disk-spinner-div">
                     <div>
-                        <img src="https://www.seekpng.com/png/full/415-4154541_dj-disk-png-orange-clip-art.png" alt="" id="disk" class="disk paused">
+                        <img src="{%static 'Images/disk.png' %}" alt="" id="disk" class="disk paused">
                         <img src="https://static.thenounproject.com/png/1584695-200.png" alt="" id="tone-arm" class="">
                     </div>
                     
-                    <div id="lyrics"></div>
                 </div>
+                <div id="lyrics"></div>
             </div>
             <div class="duration-div">
                 <label id="timeline" for="">00:00</label>
@@ -129,27 +102,48 @@
             <input onclick="ChangeTimeline()" type="range" id="progressbar" value="0">
             <div class="controls-div">
                 <div>
-                    <button onclick="LoopToggle()" class="control-btns" id="loop-btn"></button>
-                    <button onclick="SetVolume(true)" class="control-btns" id="volume-btn"></button>
+                    <button onclick="LoopToggle()" class="control-btns" id="loop-btn"><i class="fa-solid fa-repeat"></i></button>
+                    <button onclick="SetVolume(true)" class="control-btns" id="volume-btn"><i class="fa-solid fa-volume-high"></i></button>
                     <input onchange='SetVolume(false)' type="range" min='0' max='100' class="volume_adjuster" value='100'>
                 </div>
                 <div class="track-contrl-div">
-                    <button onclick="TrackChanger('previous')" class="control-btns" id="prs-btn"></button>
-                    <button onclick="PlayerToggle()" class="control-btns" id="play-btn"></button>
+                    <button onclick="TrackChanger('previous')" class="control-btns" id="prs-btn"><i class="fa-solid fa-backward-step"></i></button>
+                    <button onclick="PlayerToggle()" class="control-btns" id="play-btn"><i class="fa-solid fa-play"></i></button>
                     <div id="loader-div" class="loader-div">
                         <span class="loader"></span>
                     </div>
-                    <button onclick="TrackChanger('next')" class="control-btns" id="nxt-btn"></button>
+                    <button onclick="TrackChanger('next')" class="control-btns" id="nxt-btn"><i class="fa-solid fa-forward-step"></i></button>
                 </div>
                 <div>
-                    <a id='download-btn-link' href=""><button class="control-btns" id="download-btn"></button></a>
-                    <button class="control-btns" onclick='Like("{{naat.link}}","{{naat.title}}")'id="like-btn"></button>
+                    <a id='download-btn-link' href=""><button class="control-btns" id="download-btn"><i class="fa-solid fa-download"></i></button></a>
+                    <button class="control-btns" onclick='Like("{{naat.link}}","{{naat.title}}")'id="like-btn"><i class='fa-regular fa-heart'></i></button>
                 </div>
             </div>
         </div>
         <div id="loading-div" class="loading-div">
             <span class="loader"></span>
         </div>
+
+        <div class="auth-form">
+            <div class="signup-div">
+                <div class="signup-head">
+                    <h1>Login</h1>
+                    <button onclick='CloseSignup()'><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="signup-body">
+                    <div>
+                        <label for="">Username</label>
+                        <input name='username' class="inputbox" type="text">
+                    </div>
+                    <div>
+                        <label for="">Password</label>
+                        <input name='password' class="inputbox" type="password">
+                    </div>
+                    <button onclick='SubmitForm()' id='auth-btn' class="btn">Login</button> 
+                </div>
+              </div>
+        </div>
+
     </main>
 
 </body>

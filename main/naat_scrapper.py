@@ -26,11 +26,10 @@ def SearchNaats(name=None,url=None):
                 '</a>': '</button>',
                 'dots)':'"'
     }
-    print(page_div)
-    print('-----------------------------------------------------------------------')
+  
     for char in to_remove.keys():
         page_div = page_div.replace(char,to_remove[char])
-    print(page_div)
+
     naats = []
     for link in links:
         link = link.find('a')
@@ -41,7 +40,7 @@ def SearchNaats(name=None,url=None):
         # s = Search(str(title).lower()+artist)
         # v = str(s.results[0])
         # vid = v[41:].replace('>','')
-        img_url = f'https://img.youtube.com/vi/fk2koLbbwvE/hqdefault.jpg'
+        img_url = f'https://static.vecteezy.com/system/resources/thumbnails/009/313/617/small/vinyl-record-vector-illustration-isolated-on-white-background-free-png.png'
         naat = {
             'title':title,
             'link':l,
@@ -52,7 +51,28 @@ def SearchNaats(name=None,url=None):
     return naats,page_div
     
 
+def GetNaatKhawans(url=None):
+    if url is None:
+        r = requests.get(url='https://thenaatsharif.com/naat-khawans/')
+        html = r.content
+        soup = BeautifulSoup(html,'html.parser')
+        elem = soup.find_all('li',{'class':'cat-item'})
+        a = []
+        for i in elem:
+            for e in i.children:
+                
+                dic = {
+                    'link': str(e)[str(e).find('=')+1:str(e).find('>')].replace('"',''),
+                    'name': e.getText()
+                }
+                a.append(dic)     
 
+        return a
+    naat,page_div = SearchNaats(url=url)
+    return naat,page_div
+        
+        
+GetNaatKhawans(url='https://thenaatsharif.com/junaid-jamshed/')
 
 def GetAudio(url):
     try: 
@@ -101,7 +121,6 @@ def YtSrapper(url):
     html2 = nr.content
     soup2 = BeautifulSoup(html2,'html.parser')
     a = soup2.find_all('h3')
-    print(a)
-    print(a.get('href'))
+   
 
 # YtSrapper('https://thenaatsharif.com/hafiz-ahmed-raza-qadri/sar-e-la-makan-se-talab/')
