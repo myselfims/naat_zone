@@ -25,6 +25,8 @@ let colors = [
 ];
 
 function PlayNaat(src, title, id, naat_khwan) {
+  document.getElementById('lyrics').style.display = 'none';
+  document.getElementsByClassName("disk-spinner-div")[0].style.display = "flex";
   let promise = new Promise((resove, reject) => {
     $.ajax({
       type: "POST",

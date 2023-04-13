@@ -485,7 +485,7 @@ button{
     position: absolute;
     top: 0;
     flex-direction: column;
-    z-index: 7;
+    z-index: 9;
     height: 100vh;
     width: 100vw;
     align-items: center;
@@ -543,6 +543,9 @@ button{
     .nav-links{
         display: none;
         flex-direction: column;
+    }
+    .pagination-div div{
+        display: block;
     }
     .auth-div{
         display: none;
