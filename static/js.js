@@ -14,18 +14,12 @@ var beepaudio = new Audio(
   "https://www.soundjay.com/buttons/sounds/button-35.mp3"
 );
 
-let colors = [
-  "#6bea64",
-  "#6abbcd",
-  "#9485f8",
-  "#f885d8",
-  "#f1f885",
-  "#f88585",
-  "#d776ff",
-];
+
+
+
 
 function PlayNaat(src, title, id, naat_khwan) {
-  document.getElementById('lyrics').style.display = 'none';
+  document.getElementById("lyrics").style.display = "none";
   document.getElementsByClassName("disk-spinner-div")[0].style.display = "flex";
   let promise = new Promise((resove, reject) => {
     $.ajax({
@@ -114,7 +108,7 @@ function PlayNaat(src, title, id, naat_khwan) {
           angleGap = 19 / audio.duration;
         };
 
-        setInterval(function () {
+        audio.ontimeupdate = function () {
           if (playing) {
             audio.volume =
               document.getElementsByClassName("volume_adjuster")[0].value / 100;
@@ -141,7 +135,7 @@ function PlayNaat(src, title, id, naat_khwan) {
             ":" +
             Math.floor(audio.currentTime % 60);
           // document.getElementById('tone-arm').style.transform = 'rotate(-28deg)';
-        }, 1000);
+        };
       } else {
         TriggerAnimation("Error", "error");
       }
@@ -279,13 +273,7 @@ function LoopToggle() {
   }
 }
 
-function ChangeTimeline() {
-  let seconds = document.getElementById("progressbar").value;
-  audio.currentTime = seconds;
-}
 
-// let controlBtns = document.getElementsByClassName('control-btns')
-// console.log(controlBtns)
 
 const ControlBtnToggle = () => {
   let controlBtns = array.from(document.getElementsByClassName("control-btns"));
@@ -543,10 +531,10 @@ function SideBarToggle() {
     document.getElementsByClassName("nav-links")[0].style.display = "flex";
     document.getElementsByClassName("auth-div")[0].style.display = "flex";
     document.getElementsByClassName("search-div")[0].style.display = "none";
-    document.getElementById("hamburger-btn").style.background = "rgb(10 142 92 / 78%)";
+    document.getElementById("hamburger-btn").style.background =
+      "rgb(10 142 92 / 78%)";
   }
 }
-
 
 function ChangePage(current_url) {
   document.getElementById("loading-div").style.display = "flex";
@@ -602,10 +590,9 @@ function Authentication(btn) {
     ).innerHTML = `<i class="fa-solid fa-play"></i>`;
     audio.pause();
   } catch {}
-  if(btn!='logout'){
+  if (btn != "logout") {
     document.getElementsByClassName("auth-form")[0].style = "display: flex;";
     document.getElementById("loading-div").style.display = "flex";
-
   }
   if (btn === "login") {
     console.log("working..");
@@ -654,16 +641,16 @@ function Authentication(btn) {
         <button onclick='SubmitForm("signup")' id='auth-btn' class="btn">Signup</button> 
     </div>
   </div>`;
-  }else if(btn === 'logout'){
+  } else if (btn === "logout") {
     $.ajax({
-      type: 'POST',
-      url : ajax_url,
-      data : {
-        action : 'logout',
+      type: "POST",
+      url: ajax_url,
+      data: {
+        action: "logout",
       },
       success: function (response) {
         if (response["logout"] === true) {
-          TriggerAnimation("Logged out",'error');
+          TriggerAnimation("Logged out", "error");
           document.getElementsByClassName(
             "auth-div"
           )[0].innerHTML = `<a onclick='Authentication("login")'><button id='loginbtn'>Login</button></a>
@@ -672,13 +659,12 @@ function Authentication(btn) {
           TriggerAnimation("Something went wrong!", "error");
         }
       },
-    })
+    });
   }
 }
 
 function SubmitForm(type) {
-  document.getElementById("auth-btn").innerHTML =
-    'Processing...';
+  document.getElementById("auth-btn").innerHTML = "Processing...";
   let username = document.getElementsByName("username")[0].value;
   let password = document.getElementsByName("username")[0].value;
 
@@ -695,7 +681,8 @@ function SubmitForm(type) {
         success: function (response) {
           if (response["login"] === true) {
             TriggerAnimation("Login success");
-            document.getElementsByClassName("auth-form")[0].style.display = "none";
+            document.getElementsByClassName("auth-form")[0].style.display =
+              "none";
             document.getElementsByClassName(
               "auth-div"
             )[0].innerHTML = `<a onclick='Authentication("login")'><button id='loginbtn'>${username}</button></a>
@@ -705,11 +692,12 @@ function SubmitForm(type) {
           }
         },
       });
-    }else{TriggerAnimation('Please fill the form','error')}
-  }
-  else if (type === "signup") {
+    } else {
+      TriggerAnimation("Please fill the form", "error");
+    }
+  } else if (type === "signup") {
     let email = document.getElementsByName("email")[0].value;
-    if (username != "" && password != "" && email != '') {
+    if (username != "" && password != "" && email != "") {
       $.ajax({
         type: "POST",
         url: ajax_url,
@@ -717,22 +705,25 @@ function SubmitForm(type) {
           action: "signup",
           username: username,
           password: password,
-          email : email
+          email: email,
         },
         success: function (response) {
           if (response["signup"] === true) {
             TriggerAnimation("Account created");
-            document.getElementsByClassName("auth-form")[0].style.display = "none";
+            document.getElementsByClassName("auth-form")[0].style.display =
+              "none";
             document.getElementsByClassName(
               "auth-div"
             )[0].innerHTML = `<a onclick='Authentication("login")'><button id='loginbtn'>${username}</button></a>
             <a  onclick='Authentication("logout")'><button id='signupbtn' class='btn'>Logout</button></a>`;
           } else {
             TriggerAnimation("Username already exist!", "error");
-            document.getElementById("auth-btn").innerHTML ='Signup';
+            document.getElementById("auth-btn").innerHTML = "Signup";
           }
         },
       });
-    }else{TriggerAnimation('Please fill the form','error')}
+    } else {
+      TriggerAnimation("Please fill the form", "error");
+    }
   }
 }

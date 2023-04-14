@@ -12,12 +12,12 @@ import json
 
 def home(request):
     topnaats,pages = SearchNaats('ramzan')
-    print('pages', pages)
+
     if request.user.is_authenticated:
         print('yes')
         print(request.user.username)
         return render(request,'home.html',{'topnaats':topnaats,'pages':pages, 'user':request.user})
-    print('NO')
+
     return render(request,'home.html',{'topnaats':topnaats,'pages':pages})
 
 @csrf_exempt
@@ -46,7 +46,7 @@ def ajax(request):
                 url = request.POST.get('naat_url')
                 title = request.POST.get('title')
                 naat_khwan = request.POST.get('naat_khwan')
-                print('naat khwan is ',naat_khwan)
+             
                 check_naat = Liked.objects.filter(user=request.user,url=url)
                 if len(check_naat) <= 0:
                     obj = Liked(user=request.user,url = url, title=title,naat_khwan=naat_khwan)
@@ -59,7 +59,7 @@ def ajax(request):
         elif action == 'search':
             query = request.POST.get('query')
             results,pages = SearchNaats(query)
-            print(pages)
+    
             return JsonResponse({'result':results,'pages':pages})
         elif action == 'change_page':
             query = request.POST.get('target_url')
@@ -70,19 +70,18 @@ def ajax(request):
         elif action == 'get_artist':
             query = request.POST.get('query')
             print('running...')
-            print(query)
+     
             if str(query) != 'None':
                 results,pages = GetNaatKhawans(url=query)
                 return JsonResponse({'result':results,'pages':pages})
             results = GetNaatKhawans()
-            print(results)
+          
             return JsonResponse({'result':results})
         elif action == 'load_favorite':
-            print('worked')
+
             if request.user.is_authenticated:
                 naats = Liked.objects.filter(user=request.user).values()
-                print('working')
-                print(naats)
+                
                 if len(naats)>0:
                     return JsonResponse({'naats':list(naats)})
             return JsonResponse({'naats':False})
@@ -94,7 +93,7 @@ def ajax(request):
                     return JsonResponse({'like':True})
             return JsonResponse({'like':False})
         elif action == 'signup':
-            print('signup')
+  
             username = request.POST.get('username')
             password = request.POST.get('username')
             email = request.POST.get('username')
@@ -106,7 +105,7 @@ def ajax(request):
                 return JsonResponse({'signup':True})
             return JsonResponse({'signup':False})
         elif action == 'login':
-            print('login')
+        
             username = request.POST.get('username')
             password = request.POST.get('username')
             user = authenticate(username=username,password=password)
