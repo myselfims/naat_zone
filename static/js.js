@@ -727,3 +727,14 @@ function SubmitForm(type) {
     }
   }
 }
+
+function ChangeTimeline() {
+  audio.pause();
+  let seconds = document.getElementById("progressbar").value;
+  // audio.currentTime = seconds;
+  console.log(seconds)
+  setTimeout(() => {
+    audio.play();
+    
+  }, 100);
+}
