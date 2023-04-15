@@ -547,6 +547,12 @@ button{
     .pagination-div div{
         display: block;
     }
+    #heading {
+        margin: 5rem 0 0 1rem;
+    }
+    .pagination-div {
+        margin-bottom: 20rem;
+    }
     .auth-div{
         display: none;
     }
@@ -601,9 +607,7 @@ button{
     .track-contrl-div button{
         margin: 1rem;
     }
-    .naat-cards-div{
-        margin: 4rem 0 20rem 0;
-    }
+   
     .container{
         padding: 0;
     }
