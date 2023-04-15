@@ -544,8 +544,12 @@ button{
         display: none;
         flex-direction: column;
     }
+    .page-numbers {
+        height: fit-content;
+    }
     .pagination-div div{
-        display: block;
+        display: flex;
+        flex-direction: row;
     }
     #heading {
         margin: 5rem 0 0 1rem;
