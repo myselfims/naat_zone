@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="{%static 'style.css'%}">
     <link rel="shortcut icon" href="{%static 'Images/favicon.ico' %}" type="image/x-icon">
-    <script src="{%static 'js.js' %}"></script>
+    {% comment %} <script src="{%static 'js.js' %}"></script> {% endcomment %}
     <script src="/static/js.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Recursive&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -99,7 +99,7 @@
                 <h4 id="track-title" for=""></h4>
                 <label id="duration" for="">00:00</label>
             </div>
-            <input onchange='ChangeTimeline()' onclick="ChangeTimeline()" type="range" id="progressbar" value="0">
+            <input onchange='ChangeTimeline()' type="range" id="progressbar" value="0">
             <div class="controls-div">
                 <div>
                     <button onclick="LoopToggle()" class="control-btns" id="loop-btn"><i class="fa-solid fa-repeat"></i></button>

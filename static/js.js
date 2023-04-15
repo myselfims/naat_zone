@@ -729,12 +729,27 @@ function SubmitForm(type) {
 }
 
 function ChangeTimeline() {
-  audio.pause();
   let seconds = document.getElementById("progressbar").value;
-  audio.currentTime = seconds;
   console.log(seconds)
-  setTimeout(() => {
-    audio.play();
-    
-  }, 100);
+  audio.currentTime = seconds;
+  audio.ontimeupdate = () => {
+    seconds = document.getElementById("progressbar").value = audio.currentTime;
+  }
 }
+
+audio.onseeking = (event) => {
+  console.log('working...')
+  let seconds = document.getElementById("progressbar").value;
+  console.log(seconds)
+  audio.currentTime = seconds;
+  audio.ontimeupdate = () => {
+    seconds = document.getElementById("progressbar").value = audio.currentTime;
+  }
+  document.getElementById("loader-div").style.display = "flex";
+  document.getElementById("play-btn").style.display = "none";
+};
+
+audio.onplaying = (event) => {
+  document.getElementById("loader-div").style.display = "none";
+  document.getElementById("play-btn").style.display = "none";
+};
