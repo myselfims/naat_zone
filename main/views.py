@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .naat_scrapper import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from .models import Liked
+from .models import Liked,Visitors
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.shortcuts import redirect
@@ -11,7 +11,14 @@ import json
 # Create your views here.
 
 def home(request):
-    topnaats,pages = SearchNaats('ramzan')
+    try:
+        obj = Visitors.objects.all()[0]
+        obj.visitors += 1
+        obj.save()
+    except:
+        obj = Visitors.objects.create(visitors=1)
+        obj.save()
+    topnaats,pages = SearchNaats('new')
 
     if request.user.is_authenticated:
         print('yes')

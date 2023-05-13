@@ -16,9 +16,20 @@ var beepaudio = new Audio(
 
 
 
-
+function enableLoader(load){
+  if (load === true){
+    document.getElementById('loading-div').style.display = 'flex'
+  } else{
+    document.getElementById('loading-div').style.display = 'none'
+  }
+}
 
 function PlayNaat(src, title, id, naat_khwan) {
+  try {
+    clearTimeout(settimeout)
+  } catch (error) {
+    
+  }
   document.getElementById("lyrics").style.display = "none";
   document.getElementsByClassName("disk-spinner-div")[0].style.display = "flex";
   let promise = new Promise((resove, reject) => {
@@ -36,7 +47,7 @@ function PlayNaat(src, title, id, naat_khwan) {
   });
 
   promise.then((resp) => {
-    console.log(resp);
+    
     if (resp.like === true) {
       document.getElementById(
         "like-btn"
@@ -57,7 +68,7 @@ function PlayNaat(src, title, id, naat_khwan) {
   try {
     audio.pause();
   } catch {}
-  console.log("clicked");
+  
   $.ajax({
     type: "POST",
     url: ajax_url,
@@ -67,8 +78,8 @@ function PlayNaat(src, title, id, naat_khwan) {
     },
     success: function (response) {
       currentid = id;
-      console.log("clicked worked");
-      console.log(response["src"]);
+      
+      
       if (response["src"] != "None") {
         audio = new Audio(response["src"]);
         document.getElementById("download-btn-link").href =
@@ -78,6 +89,7 @@ function PlayNaat(src, title, id, naat_khwan) {
         let angleGap;
         audio.onloadeddata = function () {
           TriggerAnimation("Playing");
+          LoopToggle();
           document.getElementById("disk").classList.remove("paused");
           document.getElementById("tone-arm").style.transform = "rotate(3deg)";
           document.getElementById("track-title").innerHTML = title;
@@ -85,11 +97,11 @@ function PlayNaat(src, title, id, naat_khwan) {
             "player-head"
           )[0].firstElementChild.innerHTML = title;
           if (String(title).toLowerCase().includes("lyrics")) {
-            console.log(true);
+            
             document.getElementById("lyrics-btn").style.display = "flex";
           } else {
             document.getElementById("lyrics-btn").style.display = "none";
-            console.log(false);
+            
           }
 
           playing = true;
@@ -102,19 +114,19 @@ function PlayNaat(src, title, id, naat_khwan) {
             Math.floor(audio.duration / 60) +
             ":" +
             Math.floor(audio.duration % 60);
-          console.log(audio.duration % 60);
+          
           document.getElementById("progressbar").max = audio.duration;
           // angleGap = 19 / Math.floor(audio.duration / 60)
           angleGap = 19 / audio.duration;
         };
 
-        audio.ontimeupdate = function () {
+          audio.ontimeupdate = function () {
           if (playing) {
             audio.volume =
               document.getElementsByClassName("volume_adjuster")[0].value / 100;
             if (audio.currentTime === audio.duration) {
               if (audio.loop === false && next_click === false) {
-                console.log("called...");
+                
                 next_click = true;
                 document.getElementById("nxt-btn").click();
               }
@@ -135,7 +147,7 @@ function PlayNaat(src, title, id, naat_khwan) {
             ":" +
             Math.floor(audio.currentTime % 60);
           // document.getElementById('tone-arm').style.transform = 'rotate(-28deg)';
-        };
+        }
       } else {
         TriggerAnimation("Error", "error");
       }
@@ -152,7 +164,7 @@ function PlayerToggle() {
       document.getElementById(
         "play-btn"
       ).innerHTML = `<i class="fa-solid fa-play"></i>`;
-      console.log(static_url);
+      
       document.getElementById("tone-arm").style.transform = `rotate(-28deg)`;
     } else {
       playing = true;
@@ -166,7 +178,6 @@ function PlayerToggle() {
       audio.play();
     }
   }
-  // let audio = document.getElementsByTagName('audio');
 }
 
 function TrackChanger(action) {
@@ -182,14 +193,16 @@ function TrackChanger(action) {
 }
 
 document.onkeydown = function (key) {
-  console.log(key.code);
+  
   document.getElementsByTagName("body")[0].click();
   if (key.code === "Space") {
     PlayerToggle();
   }
 
   if (key.code === "ArrowRight") {
+    audio.pause()
     audio.currentTime = audio.currentTime + 10;
+    audio.play()
   }
   if (key.code === "ArrowLeft") {
     audio.currentTime = audio.currentTime - 10;
@@ -247,7 +260,7 @@ function SetVolume(check) {
       audio.volume = 0;
     }
   } else {
-    console.log(document.getElementsByClassName("volume_adjuster")[0].value);
+    
     if (document.getElementsByClassName("volume_adjuster")[0].value == 0) {
       document.getElementById(
         "volume-btn"
@@ -263,7 +276,6 @@ function SetVolume(check) {
 }
 
 function LoopToggle() {
-  console.log("Timing function running");
   if (audio.loop == false) {
     audio.loop = true;
     document.getElementById("loop-btn").style.opacity = "100%";
@@ -273,20 +285,6 @@ function LoopToggle() {
   }
 }
 
-
-
-const ControlBtnToggle = () => {
-  let controlBtns = array.from(document.getElementsByClassName("control-btns"));
-  console.log(controlBtns.length);
-  console.log(controlBtns.item);
-  // let btns = Array.from(controlBtns)
-  console.log("hello");
-  for (const i of controlBtns) {
-    console.log(i);
-  }
-};
-
-ControlBtnToggle();
 
 function ExpandPlayer() {
   let tracktitle = document.getElementById("track-title").innerHTML;
@@ -352,20 +350,20 @@ function VoiceSearch() {
     document.getElementsByName("query")[0].value =
       event.results[0][0].transcript;
     document.getElementById("search-btn").click();
-    console.log(event.results[0][0].transcript);
+    
   };
   recognition.onend = (event) => {
     document.getElementById("mic-btn").style.color = "black";
-    console.log(event);
+    
   };
   recognition.error = (event) => {
     TriggerAnimation("Please try again", "error");
     document.getElementById("mic-btn").style.color = "black";
-    console.log(event);
+    
   };
 }
-function Like(url, title) {
-  console.log("naat khawan is ", crnt_naat_khwan);
+
+function Like(url, title) { 
   if (naatpath != "" && currentTitle != "") {
     $.ajax({
       type: "POST",
@@ -378,7 +376,7 @@ function Like(url, title) {
       },
       success: function (response) {
         if (response["msg"] === true) {
-          console.log(response["msg"]);
+          
           TriggerAnimation("Added to favorite");
           document.getElementById(
             "like-btn"
@@ -389,7 +387,7 @@ function Like(url, title) {
             "like-btn"
           ).innerHTML = `<i class="fa-regular fa-heart"></i>`;
         } else {
-          console.log(response["msg"]);
+          
           TriggerAnimation("Login required!", "error");
         }
       },
@@ -400,7 +398,7 @@ function Like(url, title) {
 }
 
 function LoadFavorite() {
-  document.getElementById("loading-div").style.display = "flex";
+  enableLoader(true)
   $.ajax({
     type: "POST",
     url: ajax_url,
@@ -409,17 +407,17 @@ function LoadFavorite() {
     },
     success: function (response) {
       if (response["naats"] === false) {
-        document.getElementById("loading-div").style.display = "none";
+        enableLoader(false)
         TriggerAnimation("Login required", "error");
       } else {
-        document.getElementById("loading-div").style.display = "none";
+        enableLoader(false)
         document.getElementsByClassName("pagination-div")[0].innerHTML = "";
         document.getElementsByClassName(
           "top-card-div"
         )[0].firstElementChild.innerHTML = "My favorite";
         document.getElementsByClassName("naat-cards-div")[0].innerHTML = "";
         for (naat in response["naats"]) {
-          console.log(naat);
+          
           let element = `<div class="card">
         <img src="https://www.seekpng.com/png/full/415-4154541_dj-disk-png-orange-clip-art.png" alt="">
         <div>
@@ -440,15 +438,15 @@ function LoadFavorite() {
 
 function Search(input) {
   // loadingDiv.style.display = 'flex';
-  document.getElementById("loading-div").style.display = "flex";
+  enableLoader(true)
   let query;
   if (input === null) {
     query = document.getElementsByName("query")[0].value;
-    console.log("chalra", query);
+    
   } else {
     query = input;
   }
-  // console.log(query)
+  // 
   $.ajax({
     type: "POST",
     url: ajax_url,
@@ -460,13 +458,13 @@ function Search(input) {
       document.getElementsByClassName("pagination-div")[0].innerHTML =
         response["pages"];
       let div = document.getElementsByClassName("naat-cards-div")[0];
-      document.getElementById("loading-div").style.display = "none";
+      enableLoader(false)
       document.getElementById("heading").innerHTML =
         Array.from(response["result"]).length + " results found";
       div.innerHTML = "";
       for (const result in response["result"]) {
         let n = response["result"][result];
-        console.log(n.title);
+        
         let naat = `<div class="card">
                 <img src="${n.thumbnail}" alt="">
                 <div>
@@ -483,12 +481,12 @@ function Search(input) {
 }
 
 function GetArtist(url) {
-  document.getElementById("loading-div").style.display = "flex";
-  console.log(url);
+  enableLoader(true)
+  
   if (url === NaN) {
     url = "None";
   }
-  console.log(url);
+  
   $.ajax({
     type: "POST",
     url: ajax_url,
@@ -497,13 +495,13 @@ function GetArtist(url) {
       url: url,
     },
     success: function (response) {
-      document.getElementById("loading-div").style.display = "none";
-      console.log(response["result"][0]);
+      enableLoader(false)
+      
       let div = document.getElementsByClassName("naat-cards-div")[0];
       div.innerHTML = "";
       for (const result in Array.from(response["result"]).slice(1, 100)) {
         let n = response["result"][result];
-        console.log(n.title);
+        
         let naat = `<div class="card">
                 <img src="${n.thumbnail}" alt="">
                 <div>
@@ -537,7 +535,7 @@ function SideBarToggle() {
 }
 
 function ChangePage(current_url) {
-  document.getElementById("loading-div").style.display = "flex";
+  enableLoader(true)
   if (current_url != "") {
     $.ajax({
       type: "POST",
@@ -547,9 +545,9 @@ function ChangePage(current_url) {
         target_url: current_url,
       },
       success: function (response) {
-        document.getElementById("loading-div").style.display = "none";
+        enableLoader(false)
         let div = document.getElementsByClassName("naat-cards-div")[0];
-        document.getElementById("loading-div").style.display = "none";
+        enableLoader(false)
         document.getElementById("heading").innerHTML =
           Array.from(response["result"]).length + " results found";
         div.innerHTML = "";
@@ -559,7 +557,7 @@ function ChangePage(current_url) {
 
         for (const result in response["result"]) {
           let n = response["result"][result];
-          console.log(n.title);
+          
           let naat = `<div class="card">
                 <img src="${n.thumbnail}" alt="">
                 <div>
@@ -574,7 +572,7 @@ function ChangePage(current_url) {
       },
     });
   } else {
-    document.getElementById("loading-div").style.display = "none";
+    enableLoader(false)
     TriggerAnimation("Not Found", "error");
   }
 }
@@ -592,11 +590,11 @@ function Authentication(btn) {
   } catch {}
   if (btn != "logout") {
     document.getElementsByClassName("auth-form")[0].style = "display: flex;";
-    document.getElementById("loading-div").style.display = "flex";
+    enableLoader(true)
   }
   if (btn === "login") {
-    console.log("working..");
-    document.getElementById("loading-div").style.display = "none";
+    
+    enableLoader(false)
     document.getElementsByClassName(
       "auth-form"
     )[0].innerHTML = `<div class="signup-div">
@@ -617,7 +615,7 @@ function Authentication(btn) {
     </div>
   </div>`;
   } else if (btn === "signup") {
-    document.getElementById("loading-div").style.display = "none";
+    enableLoader(false)
     document.getElementsByClassName(
       "auth-form"
     )[0].innerHTML = `<div class="signup-div">
@@ -666,7 +664,7 @@ function Authentication(btn) {
 function SubmitForm(type) {
   document.getElementById("auth-btn").innerHTML = "Processing...";
   let username = document.getElementsByName("username")[0].value;
-  let password = document.getElementsByName("username")[0].value;
+  let password = document.getElementsByName("password")[0].value;
 
   if (type === "login") {
     if (username != "" && password != "") {
@@ -730,17 +728,14 @@ function SubmitForm(type) {
 
 function ChangeTimeline() {
   let seconds = document.getElementById("progressbar").value;
-  console.log(seconds)
   audio.currentTime = seconds;
-  audio.ontimeupdate = () => {
-    seconds = document.getElementById("progressbar").value = audio.currentTime;
-  }
+  console.log(seconds,audio.currentTime)
 }
 
 audio.onseeking = (event) => {
-  console.log('working...')
+  
   let seconds = document.getElementById("progressbar").value;
-  console.log(seconds)
+  
   audio.currentTime = seconds;
   audio.ontimeupdate = () => {
     seconds = document.getElementById("progressbar").value = audio.currentTime;

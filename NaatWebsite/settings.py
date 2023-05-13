@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-0#k$7sbv)6zy$gkv)=8g-=wp1snhzdlb!b+^11^lu8v(j443t&"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -121,7 +121,7 @@ USE_TZ = True
 import os
 
 # STATIC_HOST = os.environ.get("DJANGO_STATIC_HOST", "")
-STATIC_HOST = "https://naatzone.riseimstechnologies.com/"
+STATIC_HOST = "https://naatzone.riseimstechnologies.com/" if DEBUG==False else ''
 STATIC_URL = STATIC_HOST + "/static/"
 
 STATIC_ROOT = os.path.join(BASE_DIR,'static')

@@ -10,3 +10,9 @@ class Liked(models.Model):
     
     def __str__(self):
         return self.title
+    
+class Visitors(models.Model):
+    visitors = models.IntegerField()
+    
+    def __str__(self):
+        return str(self.visitors)
